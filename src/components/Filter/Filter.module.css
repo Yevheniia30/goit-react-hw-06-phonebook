@@ -1,0 +1,16 @@
+.filter{
+    margin-bottom: 30px;
+        display: block;
+    padding: 10px 20px;
+    margin-top: 5px;
+    border: 1px solid #cecece;
+     border-radius: 5px;
+    box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.16), 0px 4px 4px rgba(0, 0, 0, 0.06),
+    0px 1px 1px rgba(0, 0, 0, 0.12);
+}
+
+.filter:hover,
+.filter:focus{
+transform: scale(1.1);
+}
+
