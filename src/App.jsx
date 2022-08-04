@@ -3,18 +3,26 @@ import { nanoid } from 'nanoid';
 import { ContactForm } from './components/ContactForm';
 import { ContactList } from './components/ContactList';
 import { Filter } from './components/Filter';
+import { connect } from 'react-redux';
+import {
+  addUser,
+  deleteUser,
+  filterUser,
+} from './redux/contacts/contactsActions';
 
-export const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    return JSON.parse(window.localStorage.getItem('contacts')) ?? [];
-  });
+const App = ({ contacts, filter, AddUser, DeleteUser, FilterUser }) => {
+  // const [contacts, setContacts] = useState(() => {
+  //   return JSON.parse(window.localStorage.getItem('contacts')) ?? [];
+  // });
   // const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+  // const [filter, setFilter] = useState('');
 
-  useEffect(() => {
-    // console.log('contacts uef');
-    window.localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  // useEffect(() => {
+  //   console.log('contacts uef');
+  //   window.localStorage.setItem('contacts', JSON.stringify(contacts));
+  // }, [contacts]);
+
+  console.log('contacts', contacts);
 
   const handleSubmit = ({ name, number }) => {
     // const { contacts } = this.state;
@@ -35,18 +43,21 @@ export const App = () => {
       ? alert(`${number} is already in contacts as ${addedNumber.name}`)
       : !name || !number
       ? alert('Сomplete all fields')
-      : setContacts(prevState => [contact, ...prevState]);
+      : // : setContacts(prevState => [contact, ...prevState]);
+        AddUser(contact);
   };
 
   const handleDelete = id => {
-    setContacts(prevState =>
-      prevState.contacts.filter(item => item?.id !== id)
-    );
+    DeleteUser(id);
+    // setContacts(prevState =>
+    //   prevState.contacts.filter(item => item?.id !== id)
+    // );
   };
 
   const handleFilter = e => {
     const { value } = e.currentTarget;
-    setFilter(value);
+    FilterUser(value);
+    // setFilter(value);
   };
 
   const getFilteredContacts = () => {
@@ -64,6 +75,8 @@ export const App = () => {
 
   const filteredContacts = getFilteredContacts();
   // console.log('filteredContacts', filteredContacts);
+
+  console.log('contacts', contacts);
 
   return (
     <div
@@ -85,3 +98,16 @@ export const App = () => {
     </div>
   );
 };
+
+const mapStateToProps = state => ({
+  contacts: state.contacts.item,
+  filter: state.contacts.filter,
+});
+
+const mapDispatchToProps = dispatch => ({
+  AddUser: payload => dispatch(addUser(payload)),
+  DeleteUser: payload => dispatch(deleteUser(payload)),
+  FilterUser: payload => dispatch(filterUser(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
